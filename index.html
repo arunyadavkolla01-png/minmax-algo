@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tic Tac Toe AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white flex flex-col items-center p-6">
+
+<h1 class="text-3xl font-bold mb-6">Tic Tac Toe AI </h1>
+
+<div id="board" class="grid grid-cols-3 gap-2"></div>
+
+<p id="status" class="mt-4 text-xl"></p>
+
+<button onclick="resetGame()" class="mt-4 bg-blue-500 px-4 py-2 rounded">
+Restart
+</button>
+
+<script>
+
+let board = ["","","","","","","","",""];
+let human = "X";
+let ai = "O";
+
+// Create board UI
+function createBoard() {
+    const boardDiv = document.getElementById("board");
+    boardDiv.innerHTML = "";
+
+    board.forEach((cell, i) => {
+        let div = document.createElement("div");
+        div.className = "w-20 h-20 bg-gray-700 flex items-center justify-center text-2xl cursor-pointer";
+        div.innerText = cell;
+        div.onclick = () => playerMove(i);
+        boardDiv.appendChild(div);
+    });
+}
+
+// Player move
+function playerMove(index) {
+    if (board[index] === "" && !checkWinner(board)) {
+        board[index] = human;
+        createBoard();
+
+        if (!checkWinner(board) && board.includes("")) {
+            let bestMove = minimax(board, ai).index;
+            board[bestMove] = ai;
+            createBoard();
+        }
+
+        updateStatus();
+    }
+}
+
+// Minimax algorithm
+function minimax(newBoard, player) {
+    let availSpots = newBoard.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+
+    let winner = checkWinner(newBoard);
+    if (winner === human) return {score: -10};
+    if (winner === ai) return {score: 10};
+    if (availSpots.length === 0) return {score: 0};
+
+    let moves = [];
+
+    for (let i of availSpots) {
+        let move = {};
+        move.index = i;
+        newBoard[i] = player;
+
+        if (player === ai) {
+            move.score = minimax(newBoard, human).score;
+        } else {
+            move.score = minimax(newBoard, ai).score;
+        }
+
+        newBoard[i] = "";
+        moves.push(move);
+    }
+
+    let bestMove;
+    if (player === ai) {
+        let bestScore = -Infinity;
+        moves.forEach((m, i) => {
+            if (m.score > bestScore) {
+                bestScore = m.score;
+                bestMove = i;
+            }
+        });
+    } else {
+        let bestScore = Infinity;
+        moves.forEach((m, i) => {
+            if (m.score < bestScore) {
+                bestScore = m.score;
+                bestMove = i;
+            }
+        });
+    }
+
+    return moves[bestMove];
+}
+
+// Check winner
+function checkWinner(b) {
+    const winPatterns = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
+
+    for (let p of winPatterns) {
+        if (b[p[0]] && b[p[0]] === b[p[1]] && b[p[1]] === b[p[2]]) {
+            return b[p[0]];
+        }
+    }
+    return null;
+}
+
+// Update status
+function updateStatus() {
+    let winner = checkWinner(board);
+
+    if (winner) {
+        document.getElementById("status").innerText = winner + " Wins!";
+    } else if (!board.includes("")) {
+        document.getElementById("status").innerText = "Draw!";
+    } else {
+        document.getElementById("status").innerText = "Your Turn";
+    }
+}
+
+// Reset
+function resetGame() {
+    board = ["","","","","","","","",""];
+    createBoard();
+    updateStatus();
+}
+
+createBoard();
+updateStatus();
+
+</script>
+
+</body>
+</html>
