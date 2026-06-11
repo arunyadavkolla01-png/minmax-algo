@@ -5,7 +5,7 @@ function show(g){
   document.getElementById(g+"Game").classList.remove("hidden");
 }
 
-// POPUP
+ 
 function showPopup(msg){
   document.getElementById("popupText").innerText = msg;
   document.getElementById("popup").classList.remove("hidden");
