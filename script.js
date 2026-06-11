@@ -1,6 +1,6 @@
  // SWITCH
 function show(g){
-  document.getElementById("ticGame").classList.add("hidden")
+  document.getElementById("ticGame").classList.add("hidden");
   document.getElementById("puzzleGame").classList.add("hidden");
   document.getElementById(g+"Game").classList.remove("hidden");
 }
