@@ -1,0 +1,33 @@
+ body {
+  background: linear-gradient(to bottom, #1c1c1e, #000);
+  font-family: -apple-system, sans-serif;
+}
+
+.glass {
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.cell {
+  width: 70px;
+  height: 70px;
+  transition: 0.2s;
+}
+
+.cell:hover {
+  transform: scale(1.05);
+}
+
+.btn {
+  background: rgba(255,255,255,0.1);
+  padding: 8px 14px;
+  border-radius: 10px;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgba(255,255,255,0.25);
+}
